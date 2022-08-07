@@ -4,7 +4,6 @@ package com.bridgelabz.springsecurityjwt.controller;
 import com.bridgelabz.springsecurityjwt.dto.ResponseDTO;
 import com.bridgelabz.springsecurityjwt.entity.AddressBookDTO;
 import com.bridgelabz.springsecurityjwt.entity.AddressBookData;
-import com.bridgelabz.springsecurityjwt.service.user.AddressBookService;
 import com.bridgelabz.springsecurityjwt.service.user.IAddressBookService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -24,22 +23,12 @@ public class Home {
     @Autowired
     private IAddressBookService addressBookService;
 
-    //this api is accessible to authenticated user only
     @RequestMapping("/welcome")
-    public String welcome(){
-        String text = "This is a private page!!! ";
-        text+="Only authorized user can access this page!!!";
+    public String welcome() {
+        String text = "If you can see this..!!! ";
+        text += "you are authorized !!!";
         return text;
     }
-
-    //registration api permitted to be accessed by all the users
-    @PostMapping("/register")
-    public ResponseEntity<AddressBookData> addUser(@Valid @RequestBody AddressBookDTO addressBookDTO){
-        addressBookDTO.setPassword(passwordEncoder.encode(addressBookDTO.getPassword()));
-        AddressBookData user = addressBookService.addUser(addressBookDTO);
-        return ResponseEntity.ok(user);
-    }
-
 
     @GetMapping(value = {"", "/", "/get"})
     public ResponseEntity<ResponseDTO> getAddressBookData() {
@@ -50,7 +39,7 @@ public class Home {
     }
 
     @GetMapping(value = {"/get/{personId}"})
-    public ResponseEntity<ResponseDTO> getAddressBookDataById(@PathVariable int personId) {
+    public ResponseEntity<ResponseDTO> getAddressBookDataById(@PathVariable long personId) {
         AddressBookData addressBookData = addressBookService.getAddressBookDataById(personId);
         ResponseDTO responseDTO = new ResponseDTO("Success Call for Person Id!!!", addressBookData);
         return new ResponseEntity<>(responseDTO, HttpStatus.OK);
@@ -100,11 +89,13 @@ public class Home {
         return new ResponseEntity<ResponseDTO>(responseDTO, HttpStatus.OK);
     }
 
-    @PostMapping(value = {"/create"})
-    public ResponseEntity<ResponseDTO> createAddressBookData(@Valid @RequestBody AddressBookDTO addressBookDTO) {
-        AddressBookData addressBookData = addressBookService.createAddressBookData(addressBookDTO);
-        ResponseDTO responseDTO = new ResponseDTO("Data ADDED Successfully!!!", addressBookData);
-        return new ResponseEntity<>(responseDTO, HttpStatus.OK);
+    @PostMapping({"/register", "/create"})
+    public ResponseEntity<AddressBookData> addUser(@Valid @RequestBody AddressBookDTO addressBookDTO) {
+        addressBookDTO.setPassword(passwordEncoder.encode(addressBookDTO.getPassword()));
+        AddressBookData user = addressBookService.addAddressBookData(addressBookDTO);
+
+        ResponseDTO responseDTO = new ResponseDTO("Data ADDED Successfully!!!", user);
+        return new ResponseEntity<>(user, HttpStatus.OK);
     }
 
     @PutMapping(value = {"/update/{personId}"})

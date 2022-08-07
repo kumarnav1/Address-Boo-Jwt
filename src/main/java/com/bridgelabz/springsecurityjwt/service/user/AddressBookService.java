@@ -11,6 +11,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.Comparator;
 import java.util.List;
+
 @Slf4j
 @Service
 public class AddressBookService implements IAddressBookService {
@@ -23,16 +24,9 @@ public class AddressBookService implements IAddressBookService {
     IAddressBookRepository service;
 
     @Override
-    public AddressBookData addUser(AddressBookDTO addressBookDTO) {
-        AddressBookData user = modelMapper.map(addressBookDTO, AddressBookData.class);
-        return service.save(user);
-    }
-
-    @Override
     public List<AddressBookData> getUsers() {
         return null;
     }
-
 
     @Override
     public List<AddressBookData> getAddressBookData() {
@@ -78,11 +72,11 @@ public class AddressBookService implements IAddressBookService {
         return service.findById(personId).orElseThrow(() -> new AddressBookException("Person not found In the List"));
     }
 
+
     @Override
-    public AddressBookData createAddressBookData(AddressBookDTO addressBookDTO) {
-        AddressBookData addressBookData = modelMapper.map(addressBookDTO, AddressBookData.class);
-        service.save(addressBookData);
-        return addressBookData;
+    public AddressBookData addAddressBookData(AddressBookDTO addressBookDTO) {
+        AddressBookData user = modelMapper.map(addressBookDTO, AddressBookData.class);
+        return service.save(user);
     }
 
     @Override
@@ -98,8 +92,4 @@ public class AddressBookService implements IAddressBookService {
         AddressBookData addressBookData = this.getAddressBookDataById(personId);
         service.delete(addressBookData);
     }
-
-
-
-
 }

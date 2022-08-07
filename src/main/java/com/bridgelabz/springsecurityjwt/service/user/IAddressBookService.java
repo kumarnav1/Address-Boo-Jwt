@@ -6,7 +6,8 @@ import com.bridgelabz.springsecurityjwt.entity.AddressBookData;
 import java.util.List;
 
 public interface IAddressBookService {
-    public AddressBookData addUser(AddressBookDTO user);
+    public AddressBookData addAddressBookData(AddressBookDTO user);
+
     public List<AddressBookData> getUsers();
 
 
@@ -25,8 +26,6 @@ public interface IAddressBookService {
     List<AddressBookData> sortContactsByState(String state);
 
     AddressBookData getAddressBookDataById(long personId);
-
-    AddressBookData createAddressBookData(AddressBookDTO addressBookDTO);
 
     AddressBookData updateAddressBookData(long personId, AddressBookDTO addressBookDTO);
 

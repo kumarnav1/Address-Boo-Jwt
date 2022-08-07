@@ -25,11 +25,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
     private CustomUserDetailsService customUserDetailsService;
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
-            //get the header
-            //check if it starts with Bearer
-            //extract the jwt token
-            //get user based on token
-            //authenticate that user using UsernamePasswordAuthenticationToken class
+
         String requestTokenHeader = request.getHeader("Authorization");
         String username = null;
         String jwtToken = null;
@@ -44,10 +40,10 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
                 e.printStackTrace();
             }
             UserDetails userDetails = customUserDetailsService.loadUserByUsername(username);
-            //security
+
             if(username != null && SecurityContextHolder.getContext().getAuthentication() == null) {
                 if(jwtUtil.validateToken(jwtToken, userDetails)){
-                    //here we are authenticating the token extracted from the header
+
                     UsernamePasswordAuthenticationToken usernamePasswordAuthenticationToken = new UsernamePasswordAuthenticationToken(userDetails.getUsername(), null,
                             userDetails.getAuthorities());
                     usernamePasswordAuthenticationToken.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
@@ -59,9 +55,6 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
             }
 
             }
-
         filterChain.doFilter(request, response);
     }
-
 }
-//the JwtAuthenticationFilter needs to be configured in the Configuration file

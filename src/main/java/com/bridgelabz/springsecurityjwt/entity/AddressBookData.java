@@ -11,7 +11,7 @@ public class AddressBookData {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(name = "personId")
-    private int personId;
+    private long personId;
     public String role;
 
     public boolean enabled;

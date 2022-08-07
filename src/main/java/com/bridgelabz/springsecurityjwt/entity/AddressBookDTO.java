@@ -8,6 +8,7 @@ import javax.validation.constraints.Pattern;
 
 @Data
 public class AddressBookDTO {
+    public long personId;
     public String username;
     public String password;
     public String role;

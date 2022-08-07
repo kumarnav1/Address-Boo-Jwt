@@ -1,7 +1,7 @@
 package com.bridgelabz.springsecurityjwt.service;
 
-import com.bridgelabz.springsecurityjwt.entity.CustomUserDetails;
 import com.bridgelabz.springsecurityjwt.entity.AddressBookData;
+import com.bridgelabz.springsecurityjwt.entity.CustomUserDetails;
 import com.bridgelabz.springsecurityjwt.repository.IAddressBookRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -21,10 +21,9 @@ public class CustomUserDetailsService implements UserDetailsService {
 
         AddressBookData user = IAddressBookRepository.findByUsername(username);
 
-        if(user == null){
+        if (user == null) {
             throw new UsernameNotFoundException("User not Found!!");
-        }
-        else{
+        } else {
             return new CustomUserDetails(user);
         }
     }

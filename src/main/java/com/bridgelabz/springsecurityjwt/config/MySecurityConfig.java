@@ -28,6 +28,7 @@ public class MySecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Autowired
     private JwtAuthenticationEntryPoint authenticationEntryPoint;
+
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         //here we define the url that will be publicly open and private
@@ -37,7 +38,7 @@ public class MySecurityConfig extends WebSecurityConfigurerAdapter {
                 .cors()
                 .disable()
                 .authorizeRequests()
-                .antMatchers("/token", "/register","/create").permitAll()
+                .antMatchers("/token", "/register", "/create").permitAll()
                 .anyRequest().authenticated()
                 .and()
                 .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
@@ -47,15 +48,15 @@ public class MySecurityConfig extends WebSecurityConfigurerAdapter {
         http.addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class);
 
     }
-    //DONE
+
     @Override
     protected void configure(AuthenticationManagerBuilder auth) throws Exception {
-        //here we define that which authentication to use whether in memory or jdbc
+
         auth.userDetailsService(customUserDetailService);
     }
 
     @Bean
-    public PasswordEncoder passwordEncoder(){
+    public PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
     }
 
@@ -65,8 +66,7 @@ public class MySecurityConfig extends WebSecurityConfigurerAdapter {
     }
 
     @Bean
-    public ModelMapper modelMapper()
-    {
+    public ModelMapper modelMapper() {
         return new ModelMapper();
     }
 }

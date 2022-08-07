@@ -31,6 +31,11 @@ public class AddressBookService implements IAddressBookService {
     @Autowired
     IUserNameOtpRespository serviceOfOtp;
 
+    @Autowired
+    IUserNameOtpRespository otpService;
+    @Autowired
+    IUserNameOtpRespository iUserNameService;
+
     @Override
     public List<AddressBookData> getUsers() {
         return null;
@@ -92,7 +97,6 @@ public class AddressBookService implements IAddressBookService {
     }
 
 
-
     @Override
     public AddressBookData updateAddressBookData(long personId, AddressBookDTO addressBookDTO) {
         AddressBookData addressBookData = this.getAddressBookDataById(personId);
@@ -105,5 +109,18 @@ public class AddressBookService implements IAddressBookService {
     public void deleteAddressBookData(long personId) {
         AddressBookData addressBookData = this.getAddressBookDataById(personId);
         service.delete(addressBookData);
+    }
+
+    @Override
+    public Boolean verifyOtp(String username, String otp) {
+        UserNameOtpData serverOtp = otpService.findByUsername(username);
+
+        if (otp == null)
+            return false;
+        if(!(otp.equals(serverOtp.getOtp())))
+            return false;
+        service.changeVerified(username);
+        iUserNameService.deleteEntry(username);
+        return true;
     }
 }

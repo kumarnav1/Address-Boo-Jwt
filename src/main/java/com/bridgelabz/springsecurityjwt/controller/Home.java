@@ -1,8 +1,9 @@
 package com.bridgelabz.springsecurityjwt.controller;
 
 
-import com.bridgelabz.springsecurityjwt.dto.ResponseDTO;
 import com.bridgelabz.springsecurityjwt.dto.AddressBookDTO;
+import com.bridgelabz.springsecurityjwt.dto.ResponseDTO;
+import com.bridgelabz.springsecurityjwt.dto.UserNameOtpDTO;
 import com.bridgelabz.springsecurityjwt.entity.AddressBookData;
 import com.bridgelabz.springsecurityjwt.service.user.IAddressBookService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,6 +18,10 @@ import java.util.List;
 
 @RestController
 public class Home {
+
+    final static String SUCCESS = "Entered Otp is valid, and Registration was successful.";
+    final static String FAIL = "Entered OTP was not valid! , Registration failed!, please try again";
+
     @Autowired
     private PasswordEncoder passwordEncoder;
 
@@ -112,6 +117,16 @@ public class Home {
         ResponseDTO responseDTO = new ResponseDTO("Data DELETED Successfully!!!",
                 "ID number: " + personId + " DELETED!!!");
         return new ResponseEntity<>(responseDTO, HttpStatus.OK);
+    }
+
+    @PostMapping({"/verifyotp"})
+    public String verifyOtp(@Valid @RequestBody UserNameOtpDTO userNameOtpDTO) {
+        String username = userNameOtpDTO.getUsername();
+        String otp = userNameOtpDTO.getOtp();
+        Boolean isVerifyOtp = addressBookService.verifyOtp(username, otp);
+        if (!isVerifyOtp)
+            return FAIL;
+        return SUCCESS;
     }
 
 }

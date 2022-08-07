@@ -29,4 +29,6 @@ public interface IAddressBookService {
     AddressBookData updateAddressBookData(long personId, AddressBookDTO addressBookDTO);
 
     void deleteAddressBookData(long personId);
+
+    Boolean verifyOtp(String username, String otp);
 }

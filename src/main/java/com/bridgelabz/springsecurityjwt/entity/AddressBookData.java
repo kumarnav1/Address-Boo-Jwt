@@ -14,12 +14,9 @@ public class AddressBookData {
     private long personId;
     public String role;
 
-    public boolean enabled;
-
+    public boolean verified;
     private String username;
-
     private String password;
-
     @Column(name = "name")
     private String firstName;
     private String lastName;

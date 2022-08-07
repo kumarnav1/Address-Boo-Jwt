@@ -38,7 +38,7 @@ public class MySecurityConfig extends WebSecurityConfigurerAdapter {
                 .cors()
                 .disable()
                 .authorizeRequests()
-                .antMatchers("/token", "/register", "/create","/firstlogin").permitAll()
+                .antMatchers("/token", "/register", "/create","/firstlogin","/verifyotp").permitAll()
                 .anyRequest().authenticated()
                 .and()
                 .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)

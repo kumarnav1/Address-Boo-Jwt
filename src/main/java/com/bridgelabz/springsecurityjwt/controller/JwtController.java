@@ -1,7 +1,7 @@
 package com.bridgelabz.springsecurityjwt.controller;
 
-import com.bridgelabz.springsecurityjwt.entity.JwtResponse;
-import com.bridgelabz.springsecurityjwt.entity.AddressBookDTO;
+import com.bridgelabz.springsecurityjwt.dto.JwtResponse;
+import com.bridgelabz.springsecurityjwt.dto.AddressBookDTO;
 import com.bridgelabz.springsecurityjwt.helper.JwtUtil;
 import com.bridgelabz.springsecurityjwt.service.CustomUserDetailsService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,22 +27,14 @@ public class JwtController {
     @Autowired
     private CustomUserDetailsService customUserDetailsService;
 
-
-    //login api accessible to all the users
-    //this api authenticates the user
-    @PostMapping("/token")
+    @PostMapping({"/token","/firstlogin"})
     public ResponseEntity<?> generateToken(@RequestBody AddressBookDTO addressBookDTO) throws Exception {
         System.out.println(addressBookDTO);
         try {
             String username = addressBookDTO.getUsername();
             String password = addressBookDTO.getPassword();
-
             UsernamePasswordAuthenticationToken user = new UsernamePasswordAuthenticationToken(username, password);
-            //it authenticates if user already exists or not;
-            //if user exits it gets successfully authenticated and execution goes to line 52
             this.authenticationManager.authenticate(user);
-
-
         } catch (UsernameNotFoundException e) {
             e.printStackTrace();
             System.out.println("User invalid");
@@ -51,9 +43,6 @@ public class JwtController {
             e.printStackTrace();
             throw new Exception("Bad Credentials");
         }
-
-        //fine area...
-        //if user successfully authenticated then we get the UserDetails for the user and generate token for him
         UserDetails userDetails = this.customUserDetailsService.loadUserByUsername(addressBookDTO.getUsername());
         String generatedToken = this.jwtUtil.generateToken(userDetails);
         System.out.println("JWT" + generatedToken);

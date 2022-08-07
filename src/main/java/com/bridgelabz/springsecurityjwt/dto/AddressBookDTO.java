@@ -1,4 +1,4 @@
-package com.bridgelabz.springsecurityjwt.entity;
+package com.bridgelabz.springsecurityjwt.dto;
 
 import lombok.Data;
 

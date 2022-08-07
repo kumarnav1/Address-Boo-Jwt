@@ -2,7 +2,7 @@ package com.bridgelabz.springsecurityjwt.controller;
 
 
 import com.bridgelabz.springsecurityjwt.dto.ResponseDTO;
-import com.bridgelabz.springsecurityjwt.entity.AddressBookDTO;
+import com.bridgelabz.springsecurityjwt.dto.AddressBookDTO;
 import com.bridgelabz.springsecurityjwt.entity.AddressBookData;
 import com.bridgelabz.springsecurityjwt.service.user.IAddressBookService;
 import org.springframework.beans.factory.annotation.Autowired;

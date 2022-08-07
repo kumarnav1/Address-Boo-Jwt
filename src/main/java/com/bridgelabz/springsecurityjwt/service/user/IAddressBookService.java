@@ -1,6 +1,6 @@
 package com.bridgelabz.springsecurityjwt.service.user;
 
-import com.bridgelabz.springsecurityjwt.entity.AddressBookDTO;
+import com.bridgelabz.springsecurityjwt.dto.AddressBookDTO;
 import com.bridgelabz.springsecurityjwt.entity.AddressBookData;
 
 import java.util.List;

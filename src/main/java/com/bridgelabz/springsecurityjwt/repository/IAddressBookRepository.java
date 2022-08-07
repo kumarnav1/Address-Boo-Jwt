@@ -5,6 +5,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.transaction.annotation.Transactional;
+
 import java.util.List;
 
 public interface IAddressBookRepository extends JpaRepository<AddressBookData, Long> {
@@ -26,4 +27,7 @@ public interface IAddressBookRepository extends JpaRepository<AddressBookData, L
     @Transactional
     @Query(value = "update address_book_data set verified=true where username = :username ", nativeQuery = true)
     void changeVerified(String username);
+
+    @Query(value = "select verified from address_book_data where username = :username", nativeQuery = true)
+    Boolean isVerified(String username);
 }

@@ -57,7 +57,7 @@ public class Home {
         return new ResponseEntity<>(responseDTO, HttpStatus.OK);
     }
 
-    @GetMapping(value = {"/get/sortbycity"})
+        @GetMapping(value = {"/get/sortbycity"})
     public ResponseEntity<ResponseDTO> getContactsByCityUsingOrderBy() {
         List<AddressBookData> addressBookDataList = addressBookService.sortContactsByCityOrderBy();
         ResponseDTO responseDTO = new ResponseDTO("Success call for City!!!", addressBookDataList);
@@ -106,6 +106,7 @@ public class Home {
     @PutMapping(value = {"/update/{personId}"})
     public ResponseEntity<ResponseDTO> updateAddressBookData(@PathVariable int personId,
                                                              @Valid @RequestBody AddressBookDTO addressBookDTO) {
+        addressBookDTO.setPassword(passwordEncoder.encode(addressBookDTO.getPassword()));
         AddressBookData addressBookData = addressBookService.updateAddressBookData(personId, addressBookDTO);
         ResponseDTO responseDTO = new ResponseDTO("Data UPDATED Successfully!!!", addressBookData);
         return new ResponseEntity<>(responseDTO, HttpStatus.OK);

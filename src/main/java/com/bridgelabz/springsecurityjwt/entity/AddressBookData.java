@@ -13,7 +13,7 @@ public class AddressBookData {
     @Column(name = "personId")
     private long personId;
     public String role;
-
+    @GeneratedValue(strategy = GenerationType.AUTO)
     public boolean verified;
     private String username;
     private String password;

@@ -4,6 +4,7 @@ import com.bridgelabz.springsecurityjwt.dto.JwtResponse;
 import com.bridgelabz.springsecurityjwt.dto.AddressBookDTO;
 import com.bridgelabz.springsecurityjwt.helper.JwtUtil;
 import com.bridgelabz.springsecurityjwt.service.CustomUserDetailsService;
+import com.bridgelabz.springsecurityjwt.service.user.AddressBookService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -27,19 +28,25 @@ public class JwtController {
     @Autowired
     private CustomUserDetailsService customUserDetailsService;
 
-    @PostMapping({"/token","/firstlogin"})
+    @Autowired
+    private AddressBookService addressBookService;
+
+    @PostMapping({"/token", "/firstlogin"})
     public ResponseEntity<?> generateToken(@RequestBody AddressBookDTO addressBookDTO) throws Exception {
         System.out.println(addressBookDTO);
         try {
             String username = addressBookDTO.getUsername();
             String password = addressBookDTO.getPassword();
+            Boolean isVerified = addressBookService.isVerified(username);
+            if (!isVerified)
+                return ResponseEntity.ok(new JwtResponse("User not verified, Please do the verification first."));
             UsernamePasswordAuthenticationToken user = new UsernamePasswordAuthenticationToken(username, password);
             this.authenticationManager.authenticate(user);
         } catch (UsernameNotFoundException e) {
             e.printStackTrace();
             System.out.println("User invalid");
             throw new Exception("Bad Credentials");
-        }catch (BadCredentialsException e){
+        } catch (BadCredentialsException e) {
             e.printStackTrace();
             throw new Exception("Bad Credentials");
         }

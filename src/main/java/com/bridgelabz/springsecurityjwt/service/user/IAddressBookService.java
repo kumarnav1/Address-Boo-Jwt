@@ -31,4 +31,6 @@ public interface IAddressBookService {
     void deleteAddressBookData(long personId);
 
     Boolean verifyOtp(String username, String otp);
+
+    Boolean isVerified(String username);
 }

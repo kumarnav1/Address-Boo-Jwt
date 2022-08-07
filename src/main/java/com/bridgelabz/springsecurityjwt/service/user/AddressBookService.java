@@ -101,6 +101,11 @@ public class AddressBookService implements IAddressBookService {
     public AddressBookData updateAddressBookData(long personId, AddressBookDTO addressBookDTO) {
         AddressBookData addressBookData = this.getAddressBookDataById(personId);
         modelMapper.map(addressBookDTO, addressBookData);
+        int otps = (int) Math.floor(Math.random() * 1000000);
+        String otp = String.valueOf(otps);
+        UserNameOtpData userNameOtp = new UserNameOtpData(addressBookDTO.username, otp);
+        serviceOfOtp.save(userNameOtp);
+        senderService.sendEmail(addressBookData.getEmail(), "OTP for Updating Details.", otp);
         service.save(addressBookData);
         return addressBookData;
     }
@@ -122,5 +127,10 @@ public class AddressBookService implements IAddressBookService {
         service.changeVerified(username);
         iUserNameService.deleteEntry(username);
         return true;
+    }
+
+    @Override
+    public Boolean isVerified(String username) {
+        return service.isVerified(username);
     }
 }

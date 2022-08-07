@@ -10,7 +10,6 @@ public interface IAddressBookService {
 
     public List<AddressBookData> getUsers();
 
-
     List<AddressBookData> getAddressBookData();
 
     List<AddressBookData> sortAddressBookDataByComparator();

@@ -31,4 +31,9 @@ public interface IAddressBookService {
     Boolean verifyOtp(String username, String otp);
 
     Boolean isVerified(String username);
+
+    Boolean verifyEmail(String username, String email);
+
+    void sendOtpForCreatingPassword(String username, String email);
+
 }

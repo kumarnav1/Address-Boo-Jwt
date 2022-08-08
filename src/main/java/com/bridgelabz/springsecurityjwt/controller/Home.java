@@ -3,6 +3,7 @@ package com.bridgelabz.springsecurityjwt.controller;
 
 import com.bridgelabz.springsecurityjwt.dto.AddressBookDTO;
 import com.bridgelabz.springsecurityjwt.dto.ResponseDTO;
+import com.bridgelabz.springsecurityjwt.dto.UpdatePasswordDTO;
 import com.bridgelabz.springsecurityjwt.dto.UserNameOtpDTO;
 import com.bridgelabz.springsecurityjwt.entity.AddressBookData;
 import com.bridgelabz.springsecurityjwt.service.user.IAddressBookService;
@@ -57,7 +58,7 @@ public class Home {
         return new ResponseEntity<>(responseDTO, HttpStatus.OK);
     }
 
-        @GetMapping(value = {"/get/sortbycity"})
+    @GetMapping(value = {"/get/sortbycity"})
     public ResponseEntity<ResponseDTO> getContactsByCityUsingOrderBy() {
         List<AddressBookData> addressBookDataList = addressBookService.sortContactsByCityOrderBy();
         ResponseDTO responseDTO = new ResponseDTO("Success call for City!!!", addressBookDataList);
@@ -129,4 +130,18 @@ public class Home {
             return FAIL;
         return SUCCESS;
     }
+
+    @PostMapping({"/forgotpassword"})
+    public String verifyOtp(@RequestBody UpdatePasswordDTO updatePasswordDTO) {
+        String username = updatePasswordDTO.getUsername();
+        String email = updatePasswordDTO.getEmail();
+        Boolean isVerifyEmail = addressBookService.verifyEmail(username, email);
+        if (!isVerifyEmail) {
+            return "Please enter your valid credentials";
+        }
+        addressBookService.sendOtpForCreatingPassword(username, email);
+        return "EMAIL HAS BEEN SENT TO USER TO CREATE NEW PASSWORD VALIDATION";
+    }
+
+
 }

@@ -112,7 +112,7 @@ public class AddressBookService implements IAddressBookService {
 
         if (otp == null)
             return false;
-        if(!(otp.equals(serverOtp.getOtp())))
+        if (!(otp.equals(serverOtp.getOtp())))
             return false;
         iAddressBookRepository.changeVerified(username);
         iUserNameOtpRepository.deleteEntry(username);
@@ -122,5 +122,20 @@ public class AddressBookService implements IAddressBookService {
     @Override
     public Boolean isVerified(String username) {
         return iAddressBookRepository.isVerified(username);
+    }
+
+    @Override
+    public Boolean verifyEmail(String username, String email) {
+        AddressBookData addressBookData = iAddressBookRepository.findByUsername(username);
+        return addressBookData.getEmail().equals(email);
+    }
+
+    @Override
+    public void sendOtpForCreatingPassword(String username, String email) {
+        int otps = (int) Math.floor(Math.random() * 1000000);
+        String otp = String.valueOf(otps);
+        senderService.sendEmail(email, "OTP for Updating Details.", otp);
+        UserNameOtpData userNameOtp = new UserNameOtpData(username, otp);
+        iUserNameOtpRepository.save(userNameOtp);
     }
 }

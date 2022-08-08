@@ -30,4 +30,9 @@ public interface IAddressBookRepository extends JpaRepository<AddressBookData, L
 
     @Query(value = "select verified from address_book_data where username = :username", nativeQuery = true)
     Boolean isVerified(String username);
+
+    @Modifying
+    @Transactional
+    @Query(value = "update address_book_data set password = :newPassword where username = :username AND email = :email", nativeQuery = true)
+    void updateNewPassword(String username, String email, String newPassword);
 }

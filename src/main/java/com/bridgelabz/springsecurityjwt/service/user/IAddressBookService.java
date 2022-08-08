@@ -36,4 +36,6 @@ public interface IAddressBookService {
 
     void sendOtpForCreatingPassword(String username, String email);
 
+    void updateNewPassword(String username, String email, String newPassword);
+
 }

@@ -138,4 +138,9 @@ public class AddressBookService implements IAddressBookService {
         UserNameOtpData userNameOtp = new UserNameOtpData(username, otp);
         iUserNameOtpRepository.save(userNameOtp);
     }
+
+    @Override
+    public void updateNewPassword(String username, String email, String newPassword) {
+        iAddressBookRepository.updateNewPassword(username, email, newPassword);
+    }
 }

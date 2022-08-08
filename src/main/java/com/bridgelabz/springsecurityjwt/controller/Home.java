@@ -1,10 +1,6 @@
 package com.bridgelabz.springsecurityjwt.controller;
 
-
-import com.bridgelabz.springsecurityjwt.dto.AddressBookDTO;
-import com.bridgelabz.springsecurityjwt.dto.ResponseDTO;
-import com.bridgelabz.springsecurityjwt.dto.UpdatePasswordDTO;
-import com.bridgelabz.springsecurityjwt.dto.UserNameOtpDTO;
+import com.bridgelabz.springsecurityjwt.dto.*;
 import com.bridgelabz.springsecurityjwt.entity.AddressBookData;
 import com.bridgelabz.springsecurityjwt.service.user.IAddressBookService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,10 +8,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
-
 import javax.validation.Valid;
 import java.util.List;
-
 
 @RestController
 public class Home {
@@ -99,7 +93,6 @@ public class Home {
     public ResponseEntity<ResponseDTO> addUser(@Valid @RequestBody AddressBookDTO addressBookDTO) {
         addressBookDTO.setPassword(passwordEncoder.encode(addressBookDTO.getPassword()));
         AddressBookData user = addressBookService.addAddressBookData(addressBookDTO);
-
         ResponseDTO responseDTO = new ResponseDTO("Data ADDED Successfully!!!", user);
         return new ResponseEntity<>(responseDTO, HttpStatus.OK);
     }
@@ -143,5 +136,17 @@ public class Home {
         return "EMAIL HAS BEEN SENT TO USER TO CREATE NEW PASSWORD VALIDATION";
     }
 
-
+    @PostMapping({"/createnewpassword"})
+    public String createNewPassword(@RequestBody CreateNewPasswordDTO createNewPasswordDTO) {
+        createNewPasswordDTO.setNewPassword(passwordEncoder.encode(createNewPasswordDTO.getNewPassword()));
+        String newPassword = createNewPasswordDTO.getNewPassword();
+        String username = createNewPasswordDTO.getUsername();
+        String email = createNewPasswordDTO.getEmail();
+        String otp = createNewPasswordDTO.getOtp();
+        Boolean verifyOtp = addressBookService.verifyOtp(username, otp);
+        if (!verifyOtp)
+            return "Invalid Credentials!!";
+        addressBookService.updateNewPassword(username, email, newPassword);
+        return "Your new password has been created successfully";
+    }
 }

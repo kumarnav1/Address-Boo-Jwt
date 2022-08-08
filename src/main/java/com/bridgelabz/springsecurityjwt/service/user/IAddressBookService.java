@@ -8,8 +8,6 @@ import java.util.List;
 public interface IAddressBookService {
     public AddressBookData addAddressBookData(AddressBookDTO user);
 
-    public List<AddressBookData> getUsers();
-
     List<AddressBookData> getAddressBookData();
 
     List<AddressBookData> sortAddressBookDataByComparator();

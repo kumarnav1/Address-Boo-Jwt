@@ -95,12 +95,12 @@ public class Home {
     }
 
     @PostMapping({"/register", "/create"})
-    public ResponseEntity<AddressBookData> addUser(@Valid @RequestBody AddressBookDTO addressBookDTO) {
+    public ResponseEntity<ResponseDTO> addUser(@Valid @RequestBody AddressBookDTO addressBookDTO) {
         addressBookDTO.setPassword(passwordEncoder.encode(addressBookDTO.getPassword()));
         AddressBookData user = addressBookService.addAddressBookData(addressBookDTO);
 
         ResponseDTO responseDTO = new ResponseDTO("Data ADDED Successfully!!!", user);
-        return new ResponseEntity<>(user, HttpStatus.OK);
+        return new ResponseEntity<>(responseDTO, HttpStatus.OK);
     }
 
     @PutMapping(value = {"/update/{personId}"})
@@ -129,5 +129,4 @@ public class Home {
             return FAIL;
         return SUCCESS;
     }
-
 }

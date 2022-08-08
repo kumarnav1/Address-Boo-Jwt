@@ -5,7 +5,7 @@ import com.bridgelabz.springsecurityjwt.entity.AddressBookData;
 import com.bridgelabz.springsecurityjwt.entity.UserNameOtpData;
 import com.bridgelabz.springsecurityjwt.exception.AddressBookException;
 import com.bridgelabz.springsecurityjwt.repository.IAddressBookRepository;
-import com.bridgelabz.springsecurityjwt.repository.IUserNameOtpRespository;
+import com.bridgelabz.springsecurityjwt.repository.IUserNameOtpRepository;
 import com.bridgelabz.springsecurityjwt.service.EmailSenderService;
 import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
@@ -26,63 +26,53 @@ public class AddressBookService implements IAddressBookService {
     EmailSenderService senderService;
 
     @Autowired
-    IAddressBookRepository service;
+    IAddressBookRepository iAddressBookRepository;
 
     @Autowired
-    IUserNameOtpRespository serviceOfOtp;
-
-    @Autowired
-    IUserNameOtpRespository otpService;
-    @Autowired
-    IUserNameOtpRespository iUserNameService;
-
-    @Override
-    public List<AddressBookData> getUsers() {
-        return null;
-    }
+    IUserNameOtpRepository iUserNameOtpRepository;
 
     @Override
     public List<AddressBookData> getAddressBookData() {
-        return service.findAll();
+        return iAddressBookRepository.findAll();
     }
 
     @Override
     public List<AddressBookData> sortAddressBookDataByComparator() {
-        List<AddressBookData> listOfData = service.findAll();
+        List<AddressBookData> listOfData = iAddressBookRepository.findAll();
         listOfData.sort(Comparator.comparing(AddressBookData::getCity));
         return listOfData;
     }
 
     @Override
     public List<AddressBookData> sortContactsByCityOrderBy() {
-        return service.findContactsByCityOrderBy();
+        return iAddressBookRepository.findContactsByCityOrderBy();
     }
 
     @Override
     public List<AddressBookData> sortContactsByCity(String city) {
-        return service.sortContactByCity(city);
+        return iAddressBookRepository.sortContactByCity(city);
     }
 
     @Override
     public List<AddressBookData> sortAddressBookDataStateByComparator() {
-        List<AddressBookData> listOfData = service.findAll();
+        List<AddressBookData> listOfData = iAddressBookRepository.findAll();
         listOfData.sort(Comparator.comparing(AddressBookData::getState));
         return listOfData;
     }
 
     @Override
     public List<AddressBookData> sortContactsByStateOrderBy() {
-        return service.findContactsByStateOrderBy();
+        return iAddressBookRepository.findContactsByStateOrderBy();
     }
 
     @Override
     public List<AddressBookData> sortContactsByState(String state) {
-        return service.sortContactByState(state);
+        return iAddressBookRepository.sortContactByState(state);
     }
 
     @Override
     public AddressBookData getAddressBookDataById(long personId) {
-        return service.findById(personId).orElseThrow(() -> new AddressBookException("Person not found In the List"));
+        return iAddressBookRepository.findById(personId).orElseThrow(() -> new AddressBookException("Person not found In the List"));
     }
 
     @Override
@@ -91,9 +81,9 @@ public class AddressBookService implements IAddressBookService {
         int otps = (int) Math.floor(Math.random() * 1000000);
         String otp = String.valueOf(otps);
         UserNameOtpData userNameOtp = new UserNameOtpData(addressBookDTO.username, otp);
-        serviceOfOtp.save(userNameOtp);
+        iUserNameOtpRepository.save(userNameOtp);
         senderService.sendEmail(user.getEmail(), "OTP for Registration", otp);
-        return service.save(user);
+        return iAddressBookRepository.save(user);
     }
 
 
@@ -104,33 +94,33 @@ public class AddressBookService implements IAddressBookService {
         int otps = (int) Math.floor(Math.random() * 1000000);
         String otp = String.valueOf(otps);
         UserNameOtpData userNameOtp = new UserNameOtpData(addressBookDTO.username, otp);
-        serviceOfOtp.save(userNameOtp);
+        iUserNameOtpRepository.save(userNameOtp);
         senderService.sendEmail(addressBookData.getEmail(), "OTP for Updating Details.", otp);
-        service.save(addressBookData);
+        iAddressBookRepository.save(addressBookData);
         return addressBookData;
     }
 
     @Override
     public void deleteAddressBookData(long personId) {
         AddressBookData addressBookData = this.getAddressBookDataById(personId);
-        service.delete(addressBookData);
+        iAddressBookRepository.delete(addressBookData);
     }
 
     @Override
     public Boolean verifyOtp(String username, String otp) {
-        UserNameOtpData serverOtp = otpService.findByUsername(username);
+        UserNameOtpData serverOtp = iUserNameOtpRepository.findByUsername(username);
 
         if (otp == null)
             return false;
         if(!(otp.equals(serverOtp.getOtp())))
             return false;
-        service.changeVerified(username);
-        iUserNameService.deleteEntry(username);
+        iAddressBookRepository.changeVerified(username);
+        iUserNameOtpRepository.deleteEntry(username);
         return true;
     }
 
     @Override
     public Boolean isVerified(String username) {
-        return service.isVerified(username);
+        return iAddressBookRepository.isVerified(username);
     }
 }
